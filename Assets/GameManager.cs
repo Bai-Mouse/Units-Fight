@@ -12,17 +12,22 @@ public class GameManager : MonoBehaviour
     public GameObject GreenTeamTarget;
     public GameObject RedTeamTarget;
     public GameObject Cursor;
+    public GameObject Units;
     public enum GameMode
     {
         Free,
-        Defend
+        Defend,
+        Pause,
     }
+    public int Wave = 1;
     public GameMode gameMode;
     public GameObject SelectedUnit;
     public GameObject[] SelectableUnits;
+    public bool Pause;
     void Start()
     {
-
+        Pause = true;
+        Units.SetActive(false);
         if (mainCamera == null)
         {
             mainCamera = Camera.main;
@@ -31,7 +36,11 @@ public class GameManager : MonoBehaviour
     private void FixedUpdate()
     {
         SetCameraToAveragePosition();
-        
+        if (RedTeam.Count==0&& !Pause)
+        {
+            Wave++;
+            newWave();
+        }
     }
     private void Update()
     {
@@ -109,6 +118,23 @@ public class GameManager : MonoBehaviour
     public void setUnit(int i)
     {
         SelectedUnit = SelectableUnits[i];
+    }
+    public void newWave()
+    {
+        Vector2 spawnpoint = new Vector2(Random.Range(-15, 15), Random.Range(-15, 15));
+        for (int i = 0; i < SelectableUnits.Length; i++)
+        {
+            GameObject units = Instantiate(SelectableUnits[i]);
+            units.transform.position = spawnpoint+ new Vector2(Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f));
+            units.transform.SetParent(Units.transform);
+            units.tag = "RedTeam";
+        }
+    }
+
+    public void NewGame()
+    {
+        Pause = false;
+        Units.SetActive(true);
     }
     // Update is called once per frame
 }
