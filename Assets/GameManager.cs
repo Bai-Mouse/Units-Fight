@@ -1,13 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
+
 public class GameManager : MonoBehaviour
 {
     // Start is called before the first frame update
     public List<GameObject> GreenTeam = new List<GameObject>();
     public List<GameObject> RedTeam = new List<GameObject>();
+    public Vector3 GreenCenter, RedCenter;
+    float wavetimer;
     public Camera mainCamera;
     public GameObject GreenTeamTarget;
     public GameObject RedTeamTarget;
@@ -20,12 +24,16 @@ public class GameManager : MonoBehaviour
         Pause,
     }
     public int Wave = 1;
+    public int Money = 0;
     public GameMode gameMode;
-    public GameObject SelectedUnit;
-    public GameObject[] SelectableUnits;
+    public CharacterData SelectedUnit;
+    public CharacterData[] SelectableUnits;
     public bool Pause;
+    public TextMeshProUGUI MoneyText;
+    public UnitsInfo UnitsInfo;
     void Start()
     {
+        addMoney(100);
         Pause = true;
         Units.SetActive(false);
         if (mainCamera == null)
@@ -38,10 +46,24 @@ public class GameManager : MonoBehaviour
         SetCameraToAveragePosition();
         if (RedTeam.Count==0&& !Pause)
         {
-            Wave++;
-            newWave();
+            wavetimer += Time.fixedDeltaTime;
+            if (wavetimer > 3)
+            {
+                Wave++;
+                newWave();
+                wavetimer = 0;
+            }
+
         }
     }
+    public void addMoney(int money)
+    {
+        Money += money;
+        MoneyText.text = "Money: "+Money.ToString();
+        if(SelectedUnit)
+        UnitsInfo.setColor( Money > SelectedUnit.cost ? Color.green : Color.red);
+    }
+
     private void Update()
     {
         if (SelectedUnit != null)
@@ -49,22 +71,27 @@ public class GameManager : MonoBehaviour
             Cursor.SetActive(true);
             Vector3 mouseScreenPosition = Input.mousePosition;
 
-            // 将屏幕坐标转换为世界坐标
             Vector3 worldPosition = mainCamera.ScreenToWorldPoint(new Vector3(mouseScreenPosition.x, mouseScreenPosition.y, mainCamera.nearClipPlane + 10f));
 
 
             Cursor.transform.position += new Vector3((worldPosition.x - Cursor.transform.position.x) / 20, (worldPosition.y - Cursor.transform.position.y) / 20);
             if (Input.GetMouseButtonDown(0) && !EventSystem.current.IsPointerOverGameObject())
             {
+                if(Money >= SelectedUnit.cost)
+                {
+                    addMoney(SelectedUnit.cost * -1);
+                    Instantiate(SelectedUnit.instance, new Vector3(worldPosition.x, worldPosition.y, 0), Quaternion.identity);
+                }
+                if (Money < SelectedUnit.cost)
+                {
+                    SelectedUnit = null;
+                    UnitsInfo.GetComponent<Animator>().SetBool("show", false);
+                    Cursor.SetActive(false);
+                }
 
-                // 生成单位
-                Instantiate(SelectedUnit, new Vector3(worldPosition.x, worldPosition.y, 0), Quaternion.identity);
             }
         }
-        else
-        {
-            Cursor.SetActive(false);
-        }
+
         
     }
     public void SetCameraToAveragePosition()
@@ -84,47 +111,58 @@ public class GameManager : MonoBehaviour
         }
 
         Vector3 sum = Vector3.zero;
-
-        // 累加所有单位的坐标
+        
         if (GreenTeam.Count > 0)
-        foreach (GameObject unit in GreenTeam)
         {
-            if (unit != null)
+            foreach (GameObject unit in GreenTeam)
             {
-                sum += unit.transform.position;
+                if (unit != null)
+                {
+                    sum += unit.transform.position;
+                }
+                else
+                {
+                    GreenTeam.Remove(unit);
+                }
             }
-            else
-            {
-                GreenTeam.Remove(unit);
-            }
+            GreenCenter = sum / GreenTeam.Count;
         }
-        if(RedTeam.Count>0)
-        foreach (GameObject unit in RedTeam)
+        sum = Vector3.zero;
+        if (RedTeam.Count > 0)
         {
-            if (unit != null)
+            foreach (GameObject unit in RedTeam)
             {
-                sum += unit.transform.position;
+                if (unit != null)
+                {
+                    sum += unit.transform.position;
+                }
+                else
+                {
+                    RedTeam.Remove(unit);
+                }
             }
-            else
-            {
-                RedTeam.Remove(unit);
-            }
+            RedCenter = sum / RedTeam.Count;
         }
+        
 
-
-        Vector3 averagePosition = sum / (GreenTeam.Count + RedTeam.Count);
+        Vector3 averagePosition = (RedCenter+ GreenCenter)/2;
         return averagePosition;
     }
     public void setUnit(int i)
     {
         SelectedUnit = SelectableUnits[i];
+        
+        UnitsInfo.transform.GetComponent<Animator>().SetBool("show", true);
+        UnitsInfo.transform.GetComponent<Animator>().SetTrigger("showanim");
+        UnitsInfo.setInfo(SelectedUnit.icon, "REQUIRED MONEY: " + SelectedUnit.cost.ToString());
     }
+
     public void newWave()
     {
-        Vector2 spawnpoint = new Vector2(Random.Range(-15, 15), Random.Range(-15, 15));
+        Vector2 spawnpoint = new Vector2(-39.05838f + Random.Range(-10, 10), Random.Range(-10, 10));
         for (int i = 0; i < SelectableUnits.Length; i++)
         {
-            GameObject units = Instantiate(SelectableUnits[i]);
+            GameObject units = Instantiate(SelectableUnits[i].instance);
             units.transform.position = spawnpoint+ new Vector2(Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f));
             units.transform.SetParent(Units.transform);
             units.tag = "RedTeam";

@@ -10,10 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5ccb7484bb3c6f44bb895d090a8d38d7, type: 3}
-  m_Name: Unit1
+  m_Name: Unit4
   m_EditorClassIdentifier: 
-  health: 0
-  speed: 0
-  strength: 0
-  icon: {fileID: 0}
-  instance: {fileID: 0}
+  cost: 15
+  health: 15
+  speed: 4
+  strength: 4
+  icon: {fileID: -5219337101871392587, guid: bf4df7b2c9cda4c44b372e2b47a5cb8f, type: 3}
+  instance: {fileID: 7769759516863221882, guid: ccc58175a84b89e42b43aa838a1b9013, type: 3}

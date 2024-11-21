@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Rendering;
 using static UnityEngine.GraphicsBuffer;
@@ -14,6 +15,7 @@ public class MovementAI : MonoBehaviour
     public float Health;
     public float Strength=1f;
     public float Damage=1f;
+    public float Range=1f;
     float AttackCd;
     float CurrentHealth;
     public float AttackSpeed;
@@ -22,43 +24,60 @@ public class MovementAI : MonoBehaviour
     float perlinValue;
     public GameObject[] UI;
     string EnemyTag;
-    float TraceCD;
+    float TraceCD,EscapeCD;
     GameManager gameManager;
+    float Size;
+    Animator anim;
     public enum TraceMode
     {
         Normal,
         Flying,
         Ranger,
+        Bullets,
     }
     public enum ActMode
     {
         Idle,
         Chasing,
         Attack,
+        Escaping,
     }
     public TraceMode myTraceMode;
     public ActMode myActMode;
     // Start is called before the first frame update
     void Start()
     {
+        anim = GetComponent<Animator>();
+        Size = GetComponent<CircleCollider2D>()? GetComponent<CircleCollider2D>().radius*transform.localScale.x : 0;
         TraceCD = 2;
         GetComponent<SpriteRenderer>().sortingOrder += Random.Range(0, 10);
         gameManager = FindObjectOfType<GameManager>();
+        
         if (tag == "GreenTeam")
         {
-            GameObject ui = Instantiate(UI[0]);
-            ui.transform.position = transform.position+Vector3.up;
-            ui.transform.SetParent(transform);
+            if (myTraceMode != TraceMode.Bullets)
+            {
+                GameObject ui = Instantiate(UI[0]);
+                ui.transform.position = transform.position + Vector3.up;
+                ui.transform.SetParent(transform);
+                gameManager.GreenTeam.Add(gameObject);
+            }
             EnemyTag = "RedTeam";
-            gameManager.GreenTeam.Add(gameObject);
         }
         else
         {
-            GameObject ui = Instantiate(UI[1]);
-            ui.transform.position = transform.position + Vector3.up;
-            ui.transform.SetParent(transform);
+            if (myTraceMode != TraceMode.Bullets)
+            {
+                GameObject ui = Instantiate(UI[1]);
+                ui.transform.position = transform.position + Vector3.up;
+                ui.transform.SetParent(transform);
+                gameManager.RedTeam.Add(gameObject);
+            }
             EnemyTag = "GreenTeam";
-            gameManager.RedTeam.Add(gameObject);
+        }
+        if (myTraceMode == TraceMode.Bullets)
+        {
+            gameObject.tag = "Untagged";
         }
         CurrentHealth = Health;
         Rigidbody = GetComponent<Rigidbody2D>();
@@ -78,65 +97,239 @@ public class MovementAI : MonoBehaviour
                 AttackCd -= Time.fixedDeltaTime;
             }
             TargetPosition = Target.transform.position;
-            switch (myTraceMode)
-            {
-                case TraceMode.Normal:NormalAi();
-                    break;
-                case TraceMode.Flying:
-                    break;
-                case TraceMode.Ranger:
-                    break;
-            }
+            
         }
-        else
+        switch (myTraceMode)
         {
-            Rigidbody.velocity = Vector3.zero;
-            myActMode = ActMode.Idle;
-            if (animator) animator.SetBool("running", false);
-            TraceCD+=Time.fixedDeltaTime;
-            if (TraceCD > 1)
-            {
-                SetTarget(FindNearestObjectWithTag(transform.position, EnemyTag,TracingRange));
-                TraceCD = 0;
-                if (Target == null)
-                {
-                    if (tag == "GreenTeam")
-                    {
-                        Target = gameManager.GreenTeamTarget;
-                    }
-                    else
-                    {
-                        Target = gameManager.RedTeamTarget;
-                    }
-                }
-            }
-
+            case TraceMode.Normal:
+                NormalAi();
+                break;
+            case TraceMode.Flying:
+                break;
+            case TraceMode.Ranger:
+                RangerAi();
+                break;
+            case TraceMode.Bullets:
+                Collider();
+                break;
         }
+        
     }
     void NormalAi()
     {
         switch (myActMode)
         {
             case ActMode.Idle:
-                if (animator) animator.SetBool("running", false);
-                myActMode=ActMode.Chasing;
+
+
+                if (!Target)
+                {
+                    if (animator) animator.SetBool("running", false);
+                    TraceCD += Time.fixedDeltaTime;
+                    if (TraceCD > 1)
+                    {
+                        SetTarget(FindNearestObjectWithTag(transform.position, EnemyTag, TracingRange));
+                        TraceCD = 0;
+                        if (Target == null)
+                        {
+                            if (tag == "GreenTeam")
+                            {
+                                Target = gameManager.GreenTeamTarget;
+                            }
+                            else
+                            {
+                                Target = gameManager.RedTeamTarget;
+                            }
+                        }
+                    }
+                }
+                
+                if (Target)
+                {
+                    myActMode = ActMode.Chasing;
+                }
+                else
+                {
+                    Vector2 T = (tag == "GreenTeam" ? gameManager.GreenCenter : gameManager.RedCenter);
+                    if (Vector2.Distance(transform.position, T) > 2)
+                    {
+                        if (Rigidbody.velocity.magnitude < speed / 1.5f)
+                            Rigidbody.AddForce(GetDirection(T) * speed);
+                        transform.localScale = new Vector3(Mathf.Abs(transform.localScale.x) * ((T.x > transform.position.x) ? -1 : 1), Mathf.Abs(transform.localScale.y), 0);
+                        if (animator) animator.SetBool("running", true);
+                    }
+                }
                 break;
             case ActMode.Chasing:
-                if (animator) animator.SetBool("running", true);
-                if(Rigidbody.velocity.magnitude<speed/1.5f)
-                Rigidbody.AddForce(GetDirection(TargetPosition) * speed);
-                transform.localScale = new Vector3(Mathf.Abs(transform.localScale.x) * ((TargetPosition.x > transform.position.x)?-1 : 1), Mathf.Abs(transform.localScale.y), 0);
-                if (Vector3.Distance(TargetPosition, transform.position)<=1)
+                if (Target)
                 {
-                    if (AttackCd <= 0) myActMode = ActMode.Attack;
+                    if (animator) animator.SetBool("running", true);
+                    if (Rigidbody.velocity.magnitude < speed / 1.5f)
+                        Rigidbody.AddForce(GetDirection(TargetPosition) * speed);
+                    transform.localScale = new Vector3(Mathf.Abs(transform.localScale.x) * ((TargetPosition.x > transform.position.x) ? -1 : 1), Mathf.Abs(transform.localScale.y), 0);
+                    if (Vector3.Distance(TargetPosition, transform.position) <= Range + Size)
+                    {
+                        if (AttackCd <= 0) myActMode = ActMode.Attack;
+                    }
+
                 }
-                   break;
+                else
+                {
+                    myActMode = ActMode.Idle;
+                }
+                break;
             case ActMode.Attack:
-                    Target.GetComponent<MovementAI>().GetHit(1, GetDirection(TargetPosition),3,gameObject);
+                if (Target)
+                {
+                    Target.GetComponent<MovementAI>().GetHit(Damage, GetDirection(TargetPosition), Strength, gameObject);
                     AttackCd = AttackSpeed;
-                myActMode = ActMode.Idle;
+                    myActMode = ActMode.Idle;
+                }
+                else
+                {
+                    myActMode = ActMode.Idle;
+                }
+
                 break;
         }
+    }
+    void RangerAi()
+    {
+        float distance = Vector3.Distance(TargetPosition, transform.position);
+        switch (myActMode){
+            case ActMode.Idle:
+                if (!Target)
+                {
+                    if (animator) animator.SetBool("running", false);
+                    TraceCD += Time.fixedDeltaTime;
+                    if (TraceCD > 1)
+                    {
+                        SetTarget(FindNearestObjectWithTag(transform.position, EnemyTag, TracingRange));
+                        TraceCD = 0;
+                        if (Target == null)
+                        {
+                            if (tag == "GreenTeam")
+                            {
+                                Target = gameManager.GreenTeamTarget;
+                            }
+                            else
+                            {
+                                Target = gameManager.RedTeamTarget;
+                            }
+                        }
+                    }
+                }
+
+                if (Target)
+                {
+                    myActMode = ActMode.Chasing;
+                }
+                else
+                {
+                    Vector2 T = (tag == "GreenTeam" ? gameManager.GreenCenter : gameManager.RedCenter);
+                    if (Vector2.Distance(transform.position, T) > 0.5f)
+                    {
+                        if (Rigidbody.velocity.magnitude < speed / 1.5f)
+                            Rigidbody.AddForce(GetDirection(T) * speed);
+                        transform.localScale = new Vector3(Mathf.Abs(transform.localScale.x) * ((T.x > transform.position.x) ? -1 : 1), Mathf.Abs(transform.localScale.y), 0);
+                        if (animator) animator.SetBool("running", true);
+                    }
+                }
+                break;
+            case ActMode.Chasing:
+                if (Target)
+                {
+                    if (distance > Range)
+                    {
+                        if (animator) animator.SetBool("running", true);
+                        if (Rigidbody.velocity.magnitude < speed / 1.5f)
+                            Rigidbody.AddForce(GetDirection(TargetPosition) * speed);
+                        transform.localScale = new Vector3(Mathf.Abs(transform.localScale.x) * ((TargetPosition.x > transform.position.x) ? -1 : 1), Mathf.Abs(transform.localScale.y), 0);
+                    }
+                    if (distance <= Range)
+                    {
+                        Rigidbody.velocity = Rigidbody.velocity / 2;
+                        //turn in to escape mode if the target is too close
+                        if (distance <= Range / 3 && Random.Range(0, 3) == 0)
+                        {
+                        myActMode = ActMode.Escaping;
+                        break;
+                        }
+                        if (AttackCd <= 0) myActMode = ActMode.Attack;
+                    }
+                    
+                }
+                else
+                {
+                    myActMode = ActMode.Idle;
+                }
+                break;
+            case ActMode.Attack:
+                if (Target)
+                {
+                    transform.localScale = new Vector3(Mathf.Abs(transform.localScale.x) * ((TargetPosition.x > transform.position.x) ? -1 : 1), Mathf.Abs(transform.localScale.y), 0);
+                    anim.SetTrigger("attack");
+                    AttackCd = AttackSpeed;
+                    myActMode = ActMode.Idle;
+                }
+                else
+                {
+                    myActMode = ActMode.Idle;
+                }
+
+                break;
+            case ActMode.Escaping:
+                if (Target)
+                {
+                    EscapeCD += Time.fixedDeltaTime;
+                    if (animator) animator.SetBool("running", true);
+                    //GameObject TeamPosition = FindNearestObjectWithTag(transform.position, transform.tag, TracingRange);
+                    Vector2 TeamPosition = (tag == "GreenTeam" ? gameManager.GreenCenter : gameManager.RedCenter);
+                    if (Vector2.Distance(transform.position, TeamPosition)>3)
+                    {
+                        if (Rigidbody.velocity.magnitude < speed * 2)
+                            Rigidbody.AddForce(GetDirection(TeamPosition) * speed * 3f);
+                        transform.localScale = new Vector3(Mathf.Abs(transform.localScale.x) * ((TeamPosition.x > transform.position.x) ? -1 : 1), Mathf.Abs(transform.localScale.y), 0);
+                    }
+                    else
+                    {
+                        if (Rigidbody.velocity.magnitude < speed * 2)
+                            Rigidbody.AddForce(GetDirection(TargetPosition) * -speed * 3f);
+                        transform.localScale = new Vector3(Mathf.Abs(transform.localScale.x) * ((TargetPosition.x > transform.position.x) ? 1 : -1), Mathf.Abs(transform.localScale.y), 0);
+                    }
+                    
+                    if (distance >= Range / 2f||EscapeCD>=3)
+                    {
+                        myActMode = ActMode.Idle;
+                        EscapeCD = 0;
+                    }
+                }
+                else
+                {
+                    myActMode = ActMode.Idle;
+                    EscapeCD = 0;
+                }
+                break;
+        }
+    }
+    void Collider()
+    {
+        CurrentHealth -= Time.fixedDeltaTime/5;
+        if (Target)
+        {
+            Target.GetComponent<MovementAI>().GetHit(Damage, GetComponent<Rigidbody2D>().velocity.normalized, Strength, gameObject);
+            CurrentHealth -= 1;
+            
+        }
+        if (CurrentHealth <= 0)
+        {
+            DestroyBehavior();
+            CurrentHealth = 0;
+        }
+    }
+    public void RangerAttack()
+    {
+        GetComponent<Shootable>().Shoot(transform, GetDirection(TargetPosition));
     }
     Vector3 GetDirection(Vector3 t)
     {
@@ -168,7 +361,14 @@ public class MovementAI : MonoBehaviour
     }
     public void DestroyBehavior()
     {
-        Destroy(gameObject);
+        if (myTraceMode == TraceMode.Bullets)
+        {
+            Destroy(gameObject);
+        }
+        if (tag == "RedTeam")
+        {
+            gameManager.addMoney(2);
+        }
         if (tag == "GreenTeam")
         {
             gameManager.GreenTeam.Remove(gameObject);
@@ -177,7 +377,9 @@ public class MovementAI : MonoBehaviour
         {
             gameManager.RedTeam.Remove(gameObject);
         }
+        Destroy(gameObject);
     }
+    
     void SetTarget(GameObject target)
     {
         Target = target;
@@ -209,7 +411,7 @@ public class MovementAI : MonoBehaviour
         foreach (GameObject obj in objectsWithTag)
         {
             float distance = Vector3.Distance(currentPosition, obj.transform.position);
-
+            if(distance!=0)
             if (distance < shortestDistance&&distance<= range)
             {
                 shortestDistance = distance;
