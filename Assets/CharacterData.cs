@@ -9,6 +9,8 @@ public class CharacterData : ScriptableObject
     public float health;
     public float speed;
     public float strength;
+    public float damage;
     public Sprite icon;
     public GameObject instance;
+    public int DamUpgradeCount, HPUpgradeCount;
 }

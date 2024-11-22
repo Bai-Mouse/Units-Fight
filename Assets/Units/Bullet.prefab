@@ -101,15 +101,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Target: {fileID: 0}
   TracingRange: 0
-  speed: 0
+  speed: 0.03
   Health: 1
-  Strength: 0.2
-  Damage: 2
+  Strength: 2
+  Damage: 3
   Range: 0
   AttackSpeed: 0
   UI:
-  - {fileID: 3337182834651821931, guid: 18a8709c6d041ac47b3806705acee364, type: 3}
-  - {fileID: 8108638115664041916, guid: fd178c81d9d6de549871bc849e67b824, type: 3}
+  - {fileID: 6818387342440636171, guid: 60f4085790b839448920efd6e4aab191, type: 3}
+  - {fileID: 6818387342440636171, guid: a4413cba4c70bc340a35b0b0cb640b04, type: 3}
   myTraceMode: 3
   myActMode: 0
 --- !u!50 &5564821909533452869
@@ -124,7 +124,7 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 1
+  m_Mass: 0.7
   m_LinearDrag: 0
   m_AngularDrag: 1
   m_GravityScale: 0

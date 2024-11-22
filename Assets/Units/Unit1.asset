@@ -14,7 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cost: 10
   health: 20
-  speed: 6
+  speed: 5
   strength: 2
+  damage: 2
   icon: {fileID: -23792059411196189, guid: f729d6acae7cd754a864abda75a4bbd7, type: 3}
   instance: {fileID: 504927430047054451, guid: 82fd820ccb2faa34082d73fc93a410c0, type: 3}
+  DamUpgradeCount: 0
+  HPUpgradeCount: 0

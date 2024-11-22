@@ -13,8 +13,11 @@ MonoBehaviour:
   m_Name: Unit3
   m_EditorClassIdentifier: 
   cost: 20
-  health: 40
-  speed: 4
+  health: 30
+  speed: 6
   strength: 4
+  damage: 2
   icon: {fileID: -6056987297122131021, guid: a6465882e447a7346b1d80709f6094be, type: 3}
   instance: {fileID: 7769759516863221882, guid: 0b7f68d163db7a646a8ca5865d471904, type: 3}
+  DamUpgradeCount: 0
+  HPUpgradeCount: 0

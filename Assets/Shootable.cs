@@ -6,7 +6,7 @@ public class Shootable : MonoBehaviour
 {
     public GameObject Bullet;
     public float BulletSpeed=5f;
-    public void Shoot(Transform owner,Vector2 direciton)
+    public void Shoot(float dam, float str,Transform owner,Vector2 direciton)
     {
 
         GameObject b = Instantiate(Bullet);
@@ -16,6 +16,8 @@ public class Shootable : MonoBehaviour
         b.AddComponent<Rigidbody2D>();
         b.GetComponent<Rigidbody2D>().AddForce(direciton * BulletSpeed);
         b.transform.eulerAngles = new Vector3(0,0,Mathf.Atan2(direciton.y, direciton.x)*Mathf.Rad2Deg);
-        
+        b.GetComponent<MovementAI>().Damage = dam;
+        b.GetComponent<MovementAI>().Strength = str;
+
     }
 }

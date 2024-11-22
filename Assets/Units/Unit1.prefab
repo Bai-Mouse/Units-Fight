@@ -101,16 +101,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Target: {fileID: 0}
-  TracingRange: 15
+  TracingRange: 20
   speed: 5
   Health: 20
   Strength: 2
-  Damage: 1.5
+  Damage: 2
   Range: 1
   AttackSpeed: 0.5
   UI:
-  - {fileID: 3337182834651821931, guid: 18a8709c6d041ac47b3806705acee364, type: 3}
-  - {fileID: 8108638115664041916, guid: fd178c81d9d6de549871bc849e67b824, type: 3}
+  - {fileID: 6818387342440636171, guid: 60f4085790b839448920efd6e4aab191, type: 3}
+  - {fileID: 6818387342440636171, guid: a4413cba4c70bc340a35b0b0cb640b04, type: 3}
   myTraceMode: 0
   myActMode: 0
 --- !u!50 &2038512114211835962
@@ -149,7 +149,7 @@ CircleCollider2D:
   m_GameObject: {fileID: 504927430047054451}
   m_Enabled: 1
   m_Density: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: a54b0723019515e4d82ce7ed1b0e5d7a, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0

@@ -103,15 +103,15 @@ MonoBehaviour:
   Target: {fileID: 0}
   TracingRange: 30
   speed: 10
-  Health: 15
-  Strength: 0.5
+  Health: 8
+  Strength: 1
   Damage: 1
-  Range: 0.5
-  AttackSpeed: 0.8
+  Range: 0.71
+  AttackSpeed: 0.3
   UI:
-  - {fileID: 3337182834651821931, guid: 18a8709c6d041ac47b3806705acee364, type: 3}
-  - {fileID: 8108638115664041916, guid: fd178c81d9d6de549871bc849e67b824, type: 3}
-  myTraceMode: 0
+  - {fileID: 6818387342440636171, guid: 60f4085790b839448920efd6e4aab191, type: 3}
+  - {fileID: 6818387342440636171, guid: a4413cba4c70bc340a35b0b0cb640b04, type: 3}
+  myTraceMode: 1
   myActMode: 0
 --- !u!50 &7774553294170852666
 Rigidbody2D:
@@ -149,7 +149,7 @@ CircleCollider2D:
   m_GameObject: {fileID: 1533614338613974479}
   m_Enabled: 1
   m_Density: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: a54b0723019515e4d82ce7ed1b0e5d7a, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -169,7 +169,7 @@ CircleCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: -0.01}

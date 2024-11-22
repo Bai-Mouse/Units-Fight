@@ -31,7 +31,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -4.98, y: -2.16, z: 0}
-  m_LocalScale: {x: 8, y: 8, z: 1}
+  m_LocalScale: {x: 4, y: 4, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -101,15 +101,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Target: {fileID: 0}
-  TracingRange: 12
-  speed: 4
-  Health: 40
-  Strength: 4
-  Damage: 3
-  AttackSpeed: 0.5
+  TracingRange: 30
+  speed: 6
+  Health: 30
+  Strength: 6
+  Damage: 2
+  Range: 1.03
+  AttackSpeed: 1
   UI:
-  - {fileID: 3337182834651821931, guid: 18a8709c6d041ac47b3806705acee364, type: 3}
-  - {fileID: 8108638115664041916, guid: fd178c81d9d6de549871bc849e67b824, type: 3}
+  - {fileID: 6818387342440636171, guid: 60f4085790b839448920efd6e4aab191, type: 3}
+  - {fileID: 6818387342440636171, guid: a4413cba4c70bc340a35b0b0cb640b04, type: 3}
   myTraceMode: 0
   myActMode: 0
 --- !u!50 &5564821909533452869
@@ -124,8 +125,8 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 6
-  m_LinearDrag: 1
+  m_Mass: 2
+  m_LinearDrag: 0.5
   m_AngularDrag: 1
   m_GravityScale: 0
   m_Material: {fileID: 0}
@@ -148,7 +149,7 @@ CircleCollider2D:
   m_GameObject: {fileID: 7769759516863221882}
   m_Enabled: 1
   m_Density: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: a54b0723019515e4d82ce7ed1b0e5d7a, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0

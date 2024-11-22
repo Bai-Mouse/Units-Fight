@@ -2,8 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
+
 
 public class GameManager : MonoBehaviour
 {
@@ -17,6 +20,8 @@ public class GameManager : MonoBehaviour
     public GameObject RedTeamTarget;
     public GameObject Cursor;
     public GameObject Units;
+    public GameObject Turrut;
+    public GameObject Canvas,RetryButton;
     public enum GameMode
     {
         Free,
@@ -29,10 +34,15 @@ public class GameManager : MonoBehaviour
     public CharacterData SelectedUnit;
     public CharacterData[] SelectableUnits;
     public bool Pause;
-    public TextMeshProUGUI MoneyText;
+    public TextMeshProUGUI MoneyText,Counter,WaveCount;
     public UnitsInfo UnitsInfo;
+    public GameObject _turrut;
     void Start()
     {
+        for (int i = 0; i < SelectableUnits.Length; i++)
+        {
+            SelectableUnits[i] = Instantiate(SelectableUnits[i]);
+        }
         addMoney(100);
         Pause = true;
         Units.SetActive(false);
@@ -44,14 +54,22 @@ public class GameManager : MonoBehaviour
     private void FixedUpdate()
     {
         SetCameraToAveragePosition();
-        if (RedTeam.Count==0&& !Pause)
+        if (RedTeam.Count==0&& !Pause&&_turrut)
         {
-            wavetimer += Time.fixedDeltaTime;
-            if (wavetimer > 3)
+            if (gameMode == GameMode.Defend)
             {
-                Wave++;
+                GreenCenter = transform.position;
+            }
+                Counter.gameObject.SetActive(true);
+            wavetimer += Time.fixedDeltaTime;
+            Counter.text = ((int)(10-wavetimer)).ToString();
+            if (wavetimer > 10|| (Input.GetKey(KeyCode.Space)))
+            {
                 newWave();
+                Wave++;
+                WaveCount.text = "Wave: " + Wave.ToString();
                 wavetimer = 0;
+                Counter.gameObject.SetActive(false);
             }
 
         }
@@ -61,7 +79,7 @@ public class GameManager : MonoBehaviour
         Money += money;
         MoneyText.text = "Money: "+Money.ToString();
         if(SelectedUnit)
-        UnitsInfo.setColor( Money > SelectedUnit.cost ? Color.green : Color.red);
+        UnitsInfo.setColor( Money >= SelectedUnit.cost ? Color.green : Color.red, Money);
     }
 
     private void Update()
@@ -80,7 +98,12 @@ public class GameManager : MonoBehaviour
                 if(Money >= SelectedUnit.cost)
                 {
                     addMoney(SelectedUnit.cost * -1);
-                    Instantiate(SelectedUnit.instance, new Vector3(worldPosition.x, worldPosition.y, 0), Quaternion.identity);
+                    MovementAI info = Instantiate(SelectedUnit.instance, new Vector3(worldPosition.x, worldPosition.y, 0), Quaternion.identity).GetComponent<MovementAI>();
+                    info.Damage = SelectedUnit.damage;
+                    info.speed = SelectedUnit.speed;
+                    info.Health = SelectedUnit.health;
+                    info.Strength = SelectedUnit.strength;
+
                 }
                 if (Money < SelectedUnit.cost)
                 {
@@ -143,9 +166,13 @@ public class GameManager : MonoBehaviour
             }
             RedCenter = sum / RedTeam.Count;
         }
-        
-
-        Vector3 averagePosition = (RedCenter+ GreenCenter)/2;
+        Vector3 averagePosition;
+        if (RedTeam.Count == 0)
+            averagePosition = GreenCenter;
+        else if(GreenTeam.Count == 0)
+            averagePosition = RedCenter;
+        else
+            averagePosition = (RedCenter+GreenCenter)/2;
         return averagePosition;
     }
     public void setUnit(int i)
@@ -154,25 +181,81 @@ public class GameManager : MonoBehaviour
         
         UnitsInfo.transform.GetComponent<Animator>().SetBool("show", true);
         UnitsInfo.transform.GetComponent<Animator>().SetTrigger("showanim");
-        UnitsInfo.setInfo(SelectedUnit.icon, "REQUIRED MONEY: " + SelectedUnit.cost.ToString());
+        UnitsInfo.setInfo(SelectedUnit,Money);
+        UnitsInfo.setColor(Money >= SelectedUnit.cost ? Color.green : Color.red,Money);
     }
 
     public void newWave()
     {
-        Vector2 spawnpoint = new Vector2(-39.05838f + Random.Range(-10, 10), Random.Range(-10, 10));
-        for (int i = 0; i < SelectableUnits.Length; i++)
+        int WaveNum = Wave<24?1:2;
+        _turrut.GetComponent<MovementAI>().Health += 3;
+        for (int i = 0; i < WaveNum; i++)
         {
-            GameObject units = Instantiate(SelectableUnits[i].instance);
-            units.transform.position = spawnpoint+ new Vector2(Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f));
-            units.transform.SetParent(Units.transform);
-            units.tag = "RedTeam";
+            float angle = Random.Range(0f, Mathf.PI * 2);
+
+            // 随机生成半径（在范围内）
+            float radius = Random.Range(15, 25);
+
+            // 转换为笛卡尔坐标
+            float x = transform.position.x + radius * Mathf.Cos(angle);
+            float y = transform.position.y + radius * Mathf.Sin(angle);
+
+            Vector2 spawnpoint = new Vector2(x, y);
+            int maxcount = (1+Mathf.Ceil(Wave / 2) < 12) ? 1+(int)Mathf.Ceil(Wave / 2) : 12;
+            for (int j = 0; j < maxcount; j++)
+            {
+                GameObject units = Instantiate(SelectableUnits[Random.Range(0, SelectableUnits.Length)].instance);
+                units.transform.position = spawnpoint + new Vector2(Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f));
+                units.transform.SetParent(Units.transform);
+                units.tag = "RedTeam";
+                units.GetComponent<MovementAI>().Health += Wave < 50 ? Wave : 50;
+                units.GetComponent<MovementAI>().Damage += (Wave / 3) < 10 ? Wave / 3 : 10;
+                if (gameMode == GameMode.Defend) units.GetComponent<MovementAI>().Target = GreenTeam[0];
+            }
         }
     }
 
     public void NewGame()
     {
+        if(gameMode == GameMode.Defend)
+        {
+            _turrut = Instantiate(Turrut);
+            _turrut.transform.position = gameObject.transform.position;
+        }
         Pause = false;
         Units.SetActive(true);
     }
+    public void ReStart()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
     // Update is called once per frame
+    public void UpgradeHealth()
+    {
+        int cost = (int)(1 + SelectedUnit.HPUpgradeCount);
+        if (Money < cost)
+        {
+            return;
+        }
+        addMoney(-cost);
+        SelectedUnit.HPUpgradeCount += 1;
+        SelectedUnit.health += 2;
+        UnitsInfo.setInfo(SelectedUnit,Money);
+
+    }
+    public void UpgradeDamage()
+    {
+        int cost = (int)(10 + SelectedUnit.DamUpgradeCount * 5);
+        if (Money< cost)
+        {
+            return;
+        }
+        addMoney(-cost);
+        SelectedUnit.DamUpgradeCount += 1;
+        if (SelectedUnit.damage>0)
+            SelectedUnit.damage += 1;
+        else
+            SelectedUnit.damage -= 1;
+        UnitsInfo.setInfo(SelectedUnit,Money);
+    }
 }
