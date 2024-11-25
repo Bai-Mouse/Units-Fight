@@ -13,9 +13,9 @@ GameObject:
   - component: {fileID: 5864345500289176653}
   - component: {fileID: 5564821909533452869}
   - component: {fileID: 5122192508210515361}
-  - component: {fileID: 569851226743146833}
+  - component: {fileID: 8815972954611971234}
   m_Layer: 0
-  m_Name: Unit5
+  m_Name: Unit8
   m_TagString: GreenTeam
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -77,9 +77,9 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 10
-  m_Sprite: {fileID: -3239594328036583930, guid: c078262cfe23e5f45b0fdf215c6fa100, type: 3}
+  m_Sprite: {fileID: -9070499791870808695, guid: 045eb5e1f0cbc424e9a8eed9eaf27bf8, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_FlipX: 0
+  m_FlipX: 1
   m_FlipY: 0
   m_DrawMode: 0
   m_Size: {x: 1, y: 1}
@@ -101,17 +101,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Target: {fileID: 0}
-  TracingRange: 25
-  speed: 8
-  Health: 25
-  Strength: 0
+  TracingRange: 40
+  speed: 6
+  Health: 20
+  Strength: 2
   Damage: 1
-  Range: 3
-  AttackSpeed: 0.2
+  Range: 1
+  AttackSpeed: 0.1
   UI:
   - {fileID: 6818387342440636171, guid: 60f4085790b839448920efd6e4aab191, type: 3}
   - {fileID: 6818387342440636171, guid: a4413cba4c70bc340a35b0b0cb640b04, type: 3}
-  myTraceMode: 5
+  myTraceMode: 0
   myActMode: 0
 --- !u!50 &5564821909533452869
 Rigidbody2D:
@@ -125,8 +125,8 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 1
-  m_LinearDrag: 1
+  m_Mass: 2
+  m_LinearDrag: 0.5
   m_AngularDrag: 1
   m_GravityScale: 0
   m_Material: {fileID: 0}
@@ -172,10 +172,10 @@ CircleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: -0.10363293}
+  m_Offset: {x: 0, y: -0.076312125}
   serializedVersion: 2
-  m_Radius: 0.0959963
---- !u!95 &569851226743146833
+  m_Radius: 0.11926959
+--- !u!95 &8815972954611971234
 Animator:
   serializedVersion: 5
   m_ObjectHideFlags: 0
@@ -185,7 +185,7 @@ Animator:
   m_GameObject: {fileID: 7769759516863221882}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: d39a5df35a8f19c4bb0c64f21206de73, type: 2}
+  m_Controller: {fileID: 9100000, guid: 7d1534529d7f6dd48975c41d8f19171d, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0

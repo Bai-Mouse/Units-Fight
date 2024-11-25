@@ -11,7 +11,7 @@ using static UnityEngine.GraphicsBuffer;
 public class MovementAI : MonoBehaviour
 {
     public GameObject Target;
-    Vector3 TargetPosition;
+    public Vector3 TargetPosition;
     public float TracingRange=10f;
     public float speed = 1f;
     public float Health;
@@ -47,6 +47,7 @@ public class MovementAI : MonoBehaviour
         Chasing,
         Attack,
         Escaping,
+        None,
     }
     public TraceMode myTraceMode;
     public ActMode myActMode;
@@ -419,7 +420,7 @@ public class MovementAI : MonoBehaviour
                 if (Target)
                 {
                     anim.SetTrigger("attack");
-                    Target.GetComponent<MovementAI>().GetHit(Damage, GetDirection(TargetPosition), Strength, gameObject);
+                    Target.GetComponent<MovementAI>().GetHit(-Damage, GetDirection(TargetPosition), Strength, gameObject);
                     AttackCd = AttackSpeed;
                     myActMode = ActMode.Idle;
                     if(Target.GetComponent<MovementAI>().CurrentHealth== Target.GetComponent<MovementAI>().Health)
