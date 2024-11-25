@@ -16,7 +16,7 @@ MonoBehaviour:
   health: 25
   speed: 8
   strength: 0
-  damage: -1
+  damage: 1
   icon: {fileID: -3239594328036583930, guid: c078262cfe23e5f45b0fdf215c6fa100, type: 3}
   instance: {fileID: 7769759516863221882, guid: df41eb43dc06ee4449d03907ac796e0d, type: 3}
   DamUpgradeCount: 0
