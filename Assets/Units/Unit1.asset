@@ -21,3 +21,4 @@ MonoBehaviour:
   instance: {fileID: 504927430047054451, guid: 82fd820ccb2faa34082d73fc93a410c0, type: 3}
   DamUpgradeCount: 0
   HPUpgradeCount: 0
+  description: Basic Unit, Mid Hp, Mid ATK

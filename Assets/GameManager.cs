@@ -38,8 +38,11 @@ public class GameManager : MonoBehaviour
     public UnitsInfo UnitsInfo;
     public GameObject _turrut;
     public GameObject Boss;
+    public bool ManualCam;
+    public float sensitivity = 0.1f;
     void Start()
     {
+        
         for (int i = 0; i < SelectableUnits.Length; i++)
         {
             SelectableUnits[i] = Instantiate(SelectableUnits[i]);
@@ -54,7 +57,7 @@ public class GameManager : MonoBehaviour
     }
     private void FixedUpdate()
     {
-        SetCameraToAveragePosition();
+
         if (RedTeam.Count==0&& !Pause&&_turrut)
         {
             if (gameMode == GameMode.Defend)
@@ -85,6 +88,7 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
+        SetCameraToAveragePosition();
         if (SelectedUnit != null)
         {
             Cursor.SetActive(true);
@@ -120,9 +124,24 @@ public class GameManager : MonoBehaviour
     }
     public void SetCameraToAveragePosition()
     {
-        
-        Vector3 averagePosition = CalculateAveragePosition();
-        mainCamera.transform.position += new Vector3((averagePosition.x- mainCamera.transform.position.x)/5, (averagePosition.y- mainCamera.transform.position.y)/5, 0); // 保持原有的 Z 坐标
+        if (ManualCam)
+        {
+            Vector3 deltamove = Vector3.zero;
+            if (Input.GetMouseButton(0))
+            {
+                 // Adjust as needed
+                deltamove = new Vector3(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"), 0) * sensitivity;
+
+            }
+
+            mainCamera.transform.position += deltamove;
+        }
+        else
+        {
+            Vector3 averagePosition = CalculateAveragePosition();
+            mainCamera.transform.position += new Vector3((averagePosition.x - mainCamera.transform.position.x) / 5, (averagePosition.y - mainCamera.transform.position.y) / 5, 0);
+        }
+
     }
 
 
@@ -184,6 +203,7 @@ public class GameManager : MonoBehaviour
         UnitsInfo.transform.GetComponent<Animator>().SetTrigger("showanim");
         UnitsInfo.setInfo(SelectedUnit,Money);
         UnitsInfo.setColor(Money >= SelectedUnit.cost ? Color.green : Color.red,Money);
+        UnitsInfo.setDescription(SelectedUnit.description);
     }
 
     public void newWave()

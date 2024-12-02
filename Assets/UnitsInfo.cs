@@ -6,7 +6,7 @@ using TMPro;
 public class UnitsInfo : MonoBehaviour
 {
     public Image Icon;
-    public TextMeshProUGUI Text,Health,Damage;
+    public TextMeshProUGUI Text,Health,Damage,Description;
     public CharacterData temp;
     public float money;
     public void setInfo(CharacterData u,float m)
@@ -25,6 +25,10 @@ public class UnitsInfo : MonoBehaviour
         Text.color = color;
         Health.color = m < 1 + temp.HPUpgradeCount ? Color.red : Color.green;
         Damage.color = m < 10 + temp.DamUpgradeCount * 5 ? Color.red : Color.green;
+    }
+    public void setDescription(string n)
+    {
+        Description.text = n;
     }
     
 }

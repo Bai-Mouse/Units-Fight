@@ -21,3 +21,4 @@ MonoBehaviour:
   instance: {fileID: 7769759516863221882, guid: 0b7f68d163db7a646a8ca5865d471904, type: 3}
   DamUpgradeCount: 0
   HPUpgradeCount: 0
+  description: High Hp, Mid ATK, Mid Speed

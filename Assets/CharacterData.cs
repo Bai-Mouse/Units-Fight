@@ -13,4 +13,5 @@ public class CharacterData : ScriptableObject
     public Sprite icon;
     public GameObject instance;
     public int DamUpgradeCount, HPUpgradeCount;
+    public string description;
 }

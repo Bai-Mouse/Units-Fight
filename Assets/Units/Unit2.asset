@@ -19,3 +19,6 @@ MonoBehaviour:
   damage: 1
   icon: {fileID: 6570920502705930198, guid: 9f8778d0d44049a459735824f24042e0, type: 3}
   instance: {fileID: 1533614338613974479, guid: 2bb6d4b0b0c9f3a40b5e7c5ce5b923d9, type: 3}
+  DamUpgradeCount: 0
+  HPUpgradeCount: 0
+  description: Low Hp, Low ATK, High Speed, Force on backline
