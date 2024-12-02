@@ -37,6 +37,7 @@ public class GameManager : MonoBehaviour
     public TextMeshProUGUI MoneyText,Counter,WaveCount;
     public UnitsInfo UnitsInfo;
     public GameObject _turrut;
+    public GameObject Boss;
     void Start()
     {
         for (int i = 0; i < SelectableUnits.Length; i++)
@@ -189,14 +190,29 @@ public class GameManager : MonoBehaviour
     {
         int WaveNum = Wave<24?1:2;
         _turrut.GetComponent<MovementAI>().Health += 3;
+        if ((Wave+1) % 10 == 0)
+        {
+            float angle = Random.Range(0f, Mathf.PI * 2);
+
+            float radius = Random.Range(15, 25);
+
+            float x = transform.position.x + radius * Mathf.Cos(angle);
+            float y = transform.position.y + radius * Mathf.Sin(angle);
+            Vector2 spawnpoint = new Vector2(x, y);
+            GameObject units = Instantiate(Boss);
+            units.transform.position = spawnpoint + new Vector2(Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f));
+            units.transform.SetParent(Units.transform);
+            units.tag = "RedTeam";
+            units.GetComponent<MovementAI>().Health += Wave < 50 ? Wave : 50;
+            units.GetComponent<MovementAI>().Damage += (Wave / 3) < 10 ? Wave / 3 : 10;
+            if (gameMode == GameMode.Defend) units.GetComponent<MovementAI>().Target = GreenTeam[0];
+        }
         for (int i = 0; i < WaveNum; i++)
         {
             float angle = Random.Range(0f, Mathf.PI * 2);
 
-            // 随机生成半径（在范围内）
             float radius = Random.Range(15, 25);
 
-            // 转换为笛卡尔坐标
             float x = transform.position.x + radius * Mathf.Cos(angle);
             float y = transform.position.y + radius * Mathf.Sin(angle);
 
@@ -204,6 +220,13 @@ public class GameManager : MonoBehaviour
             int maxcount = (1+Mathf.Ceil(Wave / 2) < 12) ? 1+(int)Mathf.Ceil(Wave / 2) : 12;
             for (int j = 0; j < maxcount; j++)
             {
+                int index = Random.Range(0, SelectableUnits.Length);
+                int count=0;
+                while (SelectableUnits[index].cost>(Wave+1)*10&& count<10)
+                {
+                    index = Random.Range(0, SelectableUnits.Length);
+                    count++;
+                }
                 GameObject units = Instantiate(SelectableUnits[Random.Range(0, SelectableUnits.Length)].instance);
                 units.transform.position = spawnpoint + new Vector2(Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f));
                 units.transform.SetParent(Units.transform);
@@ -212,6 +235,7 @@ public class GameManager : MonoBehaviour
                 units.GetComponent<MovementAI>().Damage += (Wave / 3) < 10 ? Wave / 3 : 10;
                 if (gameMode == GameMode.Defend) units.GetComponent<MovementAI>().Target = GreenTeam[0];
             }
+            
         }
     }
 

@@ -78,7 +78,7 @@ public class BossAi : MonoBehaviour
                         {
                             MovementAI.myActMode = MovementAI.ActMode.None;
                             StateTime = 0;
-                            if (teamcount <= 1 || Random.Range(0, 2) == 0)
+                            if (teamcount <= 1 || Random.Range(0, 1) == 0)
                             {
                                 MovementAI.myTraceMode = MovementAI.TraceMode.Ranger;
                             }
@@ -138,7 +138,7 @@ public class BossAi : MonoBehaviour
                     {
                         MovementAI.myActMode = MovementAI.ActMode.None;
                         StateTime = 0;
-                        if (teamcount <= 1 || Random.Range(0, 2) == 0)
+                        if (teamcount <= 1 || Random.Range(0, 1) == 0)
                         {
                             MovementAI.myTraceMode = MovementAI.TraceMode.Normal;
                         }
