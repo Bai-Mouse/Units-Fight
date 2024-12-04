@@ -40,6 +40,10 @@ public class GameManager : MonoBehaviour
     public GameObject Boss;
     public bool ManualCam;
     public float sensitivity = 0.1f;
+
+    public float zoomSpeed = 10f; // Speed of zooming
+    public float minZoom = 15f; // Minimum FOV or orthographic size
+    public float maxZoom = 90f; // Maximum FOV or orthographic size
     void Start()
     {
         
@@ -97,7 +101,7 @@ public class GameManager : MonoBehaviour
             Vector3 worldPosition = mainCamera.ScreenToWorldPoint(new Vector3(mouseScreenPosition.x, mouseScreenPosition.y, mainCamera.nearClipPlane + 10f));
 
 
-            Cursor.transform.position += new Vector3((worldPosition.x - Cursor.transform.position.x) / 20, (worldPosition.y - Cursor.transform.position.y) / 20);
+            Cursor.transform.position += new Vector3((worldPosition.x - Cursor.transform.position.x) / 5, (worldPosition.y - Cursor.transform.position.y) / 5);
             if (Input.GetMouseButtonDown(0) && !EventSystem.current.IsPointerOverGameObject())
             {
                 if(Money >= SelectedUnit.cost)
@@ -127,7 +131,7 @@ public class GameManager : MonoBehaviour
         if (ManualCam)
         {
             Vector3 deltamove = Vector3.zero;
-            if (Input.GetMouseButton(0))
+            if (((Input.GetMouseButton(0)&& SelectedUnit == null )|| Input.GetMouseButton(2)) && !EventSystem.current.IsPointerOverGameObject())
             {
                  // Adjust as needed
                 deltamove = new Vector3(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"), 0) * sensitivity;
@@ -139,11 +143,34 @@ public class GameManager : MonoBehaviour
         else
         {
             Vector3 averagePosition = CalculateAveragePosition();
-            mainCamera.transform.position += new Vector3((averagePosition.x - mainCamera.transform.position.x) / 5, (averagePosition.y - mainCamera.transform.position.y) / 5, 0);
+            mainCamera.transform.position += new Vector3((averagePosition.x - mainCamera.transform.position.x) / 10, (averagePosition.y - mainCamera.transform.position.y) / 10, 0);
+        }
+        if (mainCamera != null)
+        {
+            // Get the scroll input
+            float scrollInput = Input.GetAxis("Mouse ScrollWheel");
+
+            if (mainCamera.orthographic)
+            {
+                // Adjust orthographic size for orthographic camera
+                mainCamera.orthographicSize -= scrollInput * zoomSpeed;
+                mainCamera.orthographicSize = Mathf.Clamp(mainCamera.orthographicSize, minZoom, maxZoom);
+            }
+            else
+            {
+                // Adjust Field of View (FOV) for perspective camera
+                mainCamera.fieldOfView -= scrollInput * zoomSpeed;
+                mainCamera.fieldOfView = Mathf.Clamp(mainCamera.fieldOfView, minZoom, maxZoom);
+            }
         }
 
     }
+    public void CameraSetting()
+    {
+        if (ManualCam) ManualCam = false;
+        else ManualCam = true;
 
+    }
 
     private Vector3 CalculateAveragePosition()
     {
@@ -209,7 +236,7 @@ public class GameManager : MonoBehaviour
     public void newWave()
     {
         int WaveNum = Wave<24?1:2;
-        _turrut.GetComponent<MovementAI>().Health += 3;
+        _turrut.GetComponent<MovementAI>().Health += 10;
         if ((Wave+1) % 10 == 0)
         {
             float angle = Random.Range(0f, Mathf.PI * 2);
@@ -223,8 +250,8 @@ public class GameManager : MonoBehaviour
             units.transform.position = spawnpoint + new Vector2(Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f));
             units.transform.SetParent(Units.transform);
             units.tag = "RedTeam";
-            units.GetComponent<MovementAI>().Health += Wave < 50 ? Wave : 50;
-            units.GetComponent<MovementAI>().Damage += (Wave / 3) < 10 ? Wave / 3 : 10;
+            units.GetComponent<MovementAI>().Health += Wave*2 < 1200 ? Wave*2 : 1200;
+            units.GetComponent<MovementAI>().Damage += (Wave / 3) < 30 ? Wave / 3 : 30;
             if (gameMode == GameMode.Defend) units.GetComponent<MovementAI>().Target = GreenTeam[0];
         }
         for (int i = 0; i < WaveNum; i++)
@@ -251,8 +278,8 @@ public class GameManager : MonoBehaviour
                 units.transform.position = spawnpoint + new Vector2(Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f));
                 units.transform.SetParent(Units.transform);
                 units.tag = "RedTeam";
-                units.GetComponent<MovementAI>().Health += Wave < 50 ? Wave : 50;
-                units.GetComponent<MovementAI>().Damage += (Wave / 3) < 10 ? Wave / 3 : 10;
+                units.GetComponent<MovementAI>().Health += Wave < 400 ? Wave : 400;
+                units.GetComponent<MovementAI>().Damage += (Wave / 3) < 30 ? Wave / 3 : 30;
                 if (gameMode == GameMode.Defend) units.GetComponent<MovementAI>().Target = GreenTeam[0];
             }
             

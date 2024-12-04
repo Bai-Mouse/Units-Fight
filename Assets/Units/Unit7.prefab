@@ -102,6 +102,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Target: {fileID: 0}
+  TargetPosition: {x: 0, y: 0, z: 0}
   TracingRange: 40
   speed: 0
   Health: 5
@@ -112,6 +113,7 @@ MonoBehaviour:
   UI:
   - {fileID: 6818387342440636171, guid: 60f4085790b839448920efd6e4aab191, type: 3}
   - {fileID: 6818387342440636171, guid: a4413cba4c70bc340a35b0b0cb640b04, type: 3}
+  EnemyTag: 
   myTraceMode: 2
   myActMode: 0
 --- !u!50 &5564821909533452869

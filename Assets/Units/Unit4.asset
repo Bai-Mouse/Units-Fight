@@ -21,3 +21,4 @@ MonoBehaviour:
   instance: {fileID: 7769759516863221882, guid: ccc58175a84b89e42b43aa838a1b9013, type: 3}
   DamUpgradeCount: 0
   HPUpgradeCount: 0
+  description: Ranger

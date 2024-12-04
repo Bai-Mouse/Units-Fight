@@ -25,7 +25,7 @@ public class MovementAI : MonoBehaviour
     Animator animator;
     float perlinValue;
     public GameObject[] UI;
-    string EnemyTag;
+    public string EnemyTag;
     float TraceCD,EscapeCD;
     GameManager gameManager;
     float Size;

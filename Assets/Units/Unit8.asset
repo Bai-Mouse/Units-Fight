@@ -21,3 +21,4 @@ MonoBehaviour:
   instance: {fileID: 7769759516863221882, guid: 8e210bfee104466428b11a87ac47221b, type: 3}
   DamUpgradeCount: 0
   HPUpgradeCount: 0
+  description: High Attack Speed, Low Damage

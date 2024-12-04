@@ -16,6 +16,7 @@ public class BossAi : MonoBehaviour
     float rby,z;
     Rigidbody2D rb;
     int teamcount;
+    public ParticleSystem ParticleSystem;
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -49,7 +50,7 @@ public class BossAi : MonoBehaviour
                 if(MovementAI.myTraceMode== MovementAI.TraceMode.Normal)
                     rb.AddForce(GetDirection(MovementAI.TargetPosition) * MovementAI.speed * 12);
                 else
-                    rb.AddForce(GetDirection(MovementAI.TargetPosition) * MovementAI.speed * -12);
+                    rb.AddForce(GetDirection(MovementAI.TargetPosition) * MovementAI.speed * 12);
                 if (rby <= 0) animator.SetBool("fall",true);
                 z += rby;
                 transform.position += Vector3.up * rby;
@@ -61,6 +62,8 @@ public class BossAi : MonoBehaviour
                     mycollider.isTrigger = false;
                     animator.SetBool("fall", false);
                     MovementAI.myActMode = MovementAI.ActMode.Idle;
+                    ParticleSystem.Play();
+                    MovementAI.AoeAttack(5, MovementAI.Damage * 2, MovementAI.EnemyTag);
                 }
             }
 

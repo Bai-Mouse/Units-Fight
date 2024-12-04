@@ -21,3 +21,4 @@ MonoBehaviour:
   instance: {fileID: 7769759516863221882, guid: f9759dc9793197a4eae0e9bcda9afa43, type: 3}
   DamUpgradeCount: 0
   HPUpgradeCount: 0
+  description: Shooter, Vulnerable, Won't Move
