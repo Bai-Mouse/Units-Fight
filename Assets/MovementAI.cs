@@ -586,7 +586,7 @@ public class MovementAI : MonoBehaviour
         if (tag == "RedTeam")
         {
             gameManager.addMoney(10);
-            if (gameManager.gameMode == GameManager.GameMode.Defend&& gameManager.RedTeam.Count==0) gameManager.addMoney(40+gameManager.Wave);
+            if (gameManager.gameMode == GameManager.GameMode.Defend&& gameManager.RedTeam.Count==0) gameManager.addMoney(40+gameManager.Wave*2);
         }
         
         Destroy(gameObject);

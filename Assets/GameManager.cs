@@ -257,6 +257,8 @@ public class GameManager : MonoBehaviour
     {
         int WaveNum = Wave<24?1:2;
         _turrut.GetComponent<MovementAI>().Health += 10;
+        _turrut.GetComponent<MovementAI>().Damage +=1f;
+        _turrut.GetComponent<MovementAI>().GetHit(-10,Vector2.zero,0, _turrut);
         if ((Wave+1) % 10 == 0)
         {
             float angle = Random.Range(0f, Mathf.PI * 2);
