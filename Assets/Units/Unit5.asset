@@ -22,3 +22,4 @@ MonoBehaviour:
   DamUpgradeCount: 0
   HPUpgradeCount: 0
   description: Healer
+  occupancy: 3

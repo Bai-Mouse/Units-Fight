@@ -16,9 +16,10 @@ MonoBehaviour:
   health: 50
   speed: 30
   strength: 10
-  damage: 8
+  damage: 10
   icon: {fileID: -1075854790282143660, guid: e3531be27cb827743bac8ea66dae5bfd, type: 3}
   instance: {fileID: 7769759516863221882, guid: 9f9dd45642b0fdd4591d7d34e84c9980, type: 3}
   DamUpgradeCount: 0
   HPUpgradeCount: 0
   description: Tank, High Damage, Low Attack Speed
+  occupancy: 5

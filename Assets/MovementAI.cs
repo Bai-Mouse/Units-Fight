@@ -11,6 +11,7 @@ using static UnityEngine.GraphicsBuffer;
 public class MovementAI : MonoBehaviour
 {
     public GameObject Target;
+    public CharacterData CharacterData;
     public Vector3 TargetPosition;
     public float TracingRange=10f;
     public float speed = 1f;
@@ -575,6 +576,8 @@ public class MovementAI : MonoBehaviour
             {
                 gameManager.RetryButton.SetActive(true);
             }
+            if(CharacterData)
+            gameManager.addUnit(-CharacterData.occupancy);
         }
         else
         {

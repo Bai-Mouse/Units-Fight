@@ -14,4 +14,5 @@ public class CharacterData : ScriptableObject
     public GameObject instance;
     public int DamUpgradeCount, HPUpgradeCount;
     public string description;
+    public int occupancy; 
 }

@@ -30,11 +30,12 @@ public class GameManager : MonoBehaviour
     }
     public int Wave = 1;
     public int Money = 0;
+    public int Unit =0;
     public GameMode gameMode;
     public CharacterData SelectedUnit;
     public CharacterData[] SelectableUnits;
     public bool Pause;
-    public TextMeshProUGUI MoneyText,Counter,WaveCount;
+    public TextMeshProUGUI MoneyText,Counter,WaveCount,UnitsCount;
     public UnitsInfo UnitsInfo;
     public GameObject _turrut;
     public GameObject Boss;
@@ -46,7 +47,7 @@ public class GameManager : MonoBehaviour
     public float maxZoom = 90f; // Maximum FOV or orthographic size
     void Start()
     {
-        
+        Unit = 0;
         for (int i = 0; i < SelectableUnits.Length; i++)
         {
             SelectableUnits[i] = Instantiate(SelectableUnits[i]);
@@ -89,7 +90,23 @@ public class GameManager : MonoBehaviour
         if(SelectedUnit)
         UnitsInfo.setColor( Money >= SelectedUnit.cost ? Color.green : Color.red, Money);
     }
-
+    public void addUnit(int unit)
+    { 
+        Unit += unit;
+        UnitsCount.text="Units: "+Unit.ToString();
+        if (Unit <= 0)
+        {
+            Unit = 0;
+        }
+        if (Unit >= 100)
+        {
+            UnitsCount.color=Color.red;
+        }
+        else
+        {
+            UnitsCount.color = Color.green;
+        }
+    }
     private void Update()
     {
         SetCameraToAveragePosition();
@@ -104,7 +121,7 @@ public class GameManager : MonoBehaviour
             Cursor.transform.position += new Vector3((worldPosition.x - Cursor.transform.position.x) / 5, (worldPosition.y - Cursor.transform.position.y) / 5);
             if (Input.GetMouseButtonDown(0) && !EventSystem.current.IsPointerOverGameObject())
             {
-                if(Money >= SelectedUnit.cost)
+                if(Money >= SelectedUnit.cost&& Unit<100)
                 {
                     addMoney(SelectedUnit.cost * -1);
                     MovementAI info = Instantiate(SelectedUnit.instance, new Vector3(worldPosition.x, worldPosition.y, 0), Quaternion.identity).GetComponent<MovementAI>();
@@ -112,6 +129,8 @@ public class GameManager : MonoBehaviour
                     info.speed = SelectedUnit.speed;
                     info.Health = SelectedUnit.health;
                     info.Strength = SelectedUnit.strength;
+                    info.CharacterData = SelectedUnit;
+                    addUnit(SelectedUnit.occupancy);
 
                 }
                 if (Money < SelectedUnit.cost)
