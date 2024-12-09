@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ccb7484bb3c6f44bb895d090a8d38d7, type: 3}
   m_Name: Unit7
   m_EditorClassIdentifier: 
-  cost: 10
+  cost: 15
   health: 5
   speed: 0
-  strength: 0
-  damage: 1
+  strength: 1
+  damage: 2
   icon: {fileID: 7059297670216363161, guid: 326dd6eeaa0ca144ca01194dbacf63fa, type: 3}
   instance: {fileID: 7769759516863221882, guid: f9759dc9793197a4eae0e9bcda9afa43, type: 3}
   DamUpgradeCount: 0

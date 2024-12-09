@@ -51,7 +51,7 @@ public class GameManager : MonoBehaviour
         {
             SelectableUnits[i] = Instantiate(SelectableUnits[i]);
         }
-        addMoney(100);
+        addMoney(50);
         Pause = true;
         Units.SetActive(false);
         if (mainCamera == null)
@@ -128,6 +128,7 @@ public class GameManager : MonoBehaviour
     }
     public void SetCameraToAveragePosition()
     {
+        Vector3 averagePosition = CalculateAveragePosition();
         if (ManualCam)
         {
             Vector3 deltamove = Vector3.zero;
@@ -142,7 +143,7 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            Vector3 averagePosition = CalculateAveragePosition();
+            
             mainCamera.transform.position += new Vector3((averagePosition.x - mainCamera.transform.position.x) / 10, (averagePosition.y - mainCamera.transform.position.y) / 10, 0);
         }
         if (mainCamera != null)
@@ -214,9 +215,9 @@ public class GameManager : MonoBehaviour
             RedCenter = sum / RedTeam.Count;
         }
         Vector3 averagePosition;
-        if (RedTeam.Count == 0)
+        if (RedTeam.Count <= 1)
             averagePosition = GreenCenter;
-        else if(GreenTeam.Count == 0)
+        else if(GreenTeam.Count <= 1)
             averagePosition = RedCenter;
         else
             averagePosition = (RedCenter+GreenCenter)/2;
@@ -251,8 +252,8 @@ public class GameManager : MonoBehaviour
             units.transform.SetParent(Units.transform);
             units.tag = "RedTeam";
             units.GetComponent<MovementAI>().Health += Wave*2 < 1200 ? Wave*2 : 1200;
-            units.GetComponent<MovementAI>().Damage += (Wave / 3) < 30 ? Wave / 3 : 30;
-            if (gameMode == GameMode.Defend) units.GetComponent<MovementAI>().Target = GreenTeam[0];
+            units.GetComponent<MovementAI>().Damage += (Wave / 2) < 30 ? Wave / 2 : 30;
+            units.GetComponent<MovementAI>().TracingRange = 10000;
         }
         for (int i = 0; i < WaveNum; i++)
         {
@@ -269,18 +270,18 @@ public class GameManager : MonoBehaviour
             {
                 int index = Random.Range(0, SelectableUnits.Length);
                 int count=0;
-                while (SelectableUnits[index].cost>(Wave+1)*10&& count<10)
+                while (SelectableUnits[index].cost>(Wave+1)*10 && count<10)
                 {
                     index = Random.Range(0, SelectableUnits.Length);
                     count++;
                 }
-                GameObject units = Instantiate(SelectableUnits[Random.Range(0, SelectableUnits.Length)].instance);
+                GameObject units = Instantiate(SelectableUnits[index].instance);
                 units.transform.position = spawnpoint + new Vector2(Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f));
                 units.transform.SetParent(Units.transform);
                 units.tag = "RedTeam";
                 units.GetComponent<MovementAI>().Health += Wave < 400 ? Wave : 400;
-                units.GetComponent<MovementAI>().Damage += (Wave / 3) < 30 ? Wave / 3 : 30;
-                if (gameMode == GameMode.Defend) units.GetComponent<MovementAI>().Target = GreenTeam[0];
+                units.GetComponent<MovementAI>().Damage += (Wave / 2) < 30 ? Wave / 2: 30;
+                units.GetComponent<MovementAI>().TracingRange = 10000;
             }
             
         }

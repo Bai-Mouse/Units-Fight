@@ -109,7 +109,7 @@ MonoBehaviour:
   Strength: 0
   Damage: 1
   Range: 25
-  AttackSpeed: 0.2
+  AttackSpeed: 1
   UI:
   - {fileID: 6818387342440636171, guid: 60f4085790b839448920efd6e4aab191, type: 3}
   - {fileID: 6818387342440636171, guid: a4413cba4c70bc340a35b0b0cb640b04, type: 3}

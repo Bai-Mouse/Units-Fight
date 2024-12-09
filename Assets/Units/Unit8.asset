@@ -15,10 +15,10 @@ MonoBehaviour:
   cost: 30
   health: 20
   speed: 6
-  strength: 2
+  strength: 0
   damage: 1
   icon: {fileID: -9070499791870808695, guid: 045eb5e1f0cbc424e9a8eed9eaf27bf8, type: 3}
   instance: {fileID: 7769759516863221882, guid: 8e210bfee104466428b11a87ac47221b, type: 3}
   DamUpgradeCount: 0
   HPUpgradeCount: 0
-  description: High Attack Speed, Low Damage
+  description: AOE, High Attack Speed, Low Damage

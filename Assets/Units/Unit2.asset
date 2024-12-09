@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ccb7484bb3c6f44bb895d090a8d38d7, type: 3}
   m_Name: Unit2
   m_EditorClassIdentifier: 
-  cost: 8
+  cost: 5
   health: 8
-  speed: 10
-  strength: 1
+  speed: 20
+  strength: 0
   damage: 1
   icon: {fileID: 6570920502705930198, guid: 9f8778d0d44049a459735824f24042e0, type: 3}
   instance: {fileID: 1533614338613974479, guid: 2bb6d4b0b0c9f3a40b5e7c5ce5b923d9, type: 3}

@@ -5,7 +5,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.UI;
-using static UnityEditor.ShaderGraph.Internal.KeywordDependentCollection;
+
 using static UnityEngine.GraphicsBuffer;
 
 public class MovementAI : MonoBehaviour
@@ -31,6 +31,7 @@ public class MovementAI : MonoBehaviour
     float Size;
     Animator anim;
     GameObject Healthbar;
+    ParticleSystem _particleSystem;
     public enum TraceMode
     {
         Normal,
@@ -49,12 +50,21 @@ public class MovementAI : MonoBehaviour
         Escaping,
         None,
     }
+    public enum AttackMode
+    {
+        Normal,
+        Aoe,
+       
+    }
+
     public TraceMode myTraceMode;
     public ActMode myActMode;
+    public AttackMode myAttackMode; 
     // Start is called before the first frame update
     void Start()
     {
-
+        if(transform.childCount>=1)
+        _particleSystem =transform.GetChild(0).GetComponent<ParticleSystem>();
         anim = GetComponent<Animator>();
         Size = GetComponent<CircleCollider2D>()? GetComponent<CircleCollider2D>().radius*transform.localScale.x : 0;
         TraceCD = 2;
@@ -176,7 +186,19 @@ public class MovementAI : MonoBehaviour
                 if (Target)
                 {
                     myActMode = ActMode.Chasing;
-                   
+                    if (i == 2)
+                    {
+                        Vector2 dir = GetDirection(TargetPosition);
+                        if (Random.Range(0, 2) == 0)
+                        {
+                            Rigidbody.AddForce(new Vector2(dir.y, -dir.x) * speed*30);
+                        }
+                        else
+                        {
+                            Rigidbody.AddForce(new Vector2(dir.y, dir.x) * speed*30);
+                        }
+
+                    }
                 }
                 else
                 {
@@ -211,7 +233,16 @@ public class MovementAI : MonoBehaviour
             case ActMode.Attack:
                 if (Target)
                 {
-                    Target.GetComponent<MovementAI>().GetHit(Damage, GetDirection(TargetPosition), Strength, gameObject);
+
+                    if (myAttackMode == AttackMode.Aoe)
+                    {
+                        _particleSystem.Play();
+                        AoeAttack(Range, Damage, EnemyTag);
+                    }
+                    else
+                    {
+                        Target.GetComponent<MovementAI>().GetHit(Damage, GetDirection(TargetPosition), Strength, gameObject);
+                    }
                     AttackCd = AttackSpeed;
                     myActMode = ActMode.Idle;
                     
@@ -551,8 +582,8 @@ public class MovementAI : MonoBehaviour
         }
         if (tag == "RedTeam")
         {
-            gameManager.addMoney(4);
-            if (gameManager.gameMode == GameManager.GameMode.Defend&& gameManager.RedTeam.Count==0) gameManager.addMoney(40+gameManager.Wave*2);
+            gameManager.addMoney(10);
+            if (gameManager.gameMode == GameManager.GameMode.Defend&& gameManager.RedTeam.Count==0) gameManager.addMoney(40+gameManager.Wave);
         }
         
         Destroy(gameObject);
@@ -609,7 +640,7 @@ public class MovementAI : MonoBehaviour
         if (objectsWithTag.Length == 0)
             return null;
 
-        GameObject nearestObject = null;
+        GameObject farestObject = null;
         float farestDistance = 0;
 
         // Iterate through all objects to find the nearest one
@@ -620,11 +651,11 @@ public class MovementAI : MonoBehaviour
                 if (distance > farestDistance && distance <= range)
                 {
                     farestDistance = distance;
-                    nearestObject = obj;
+                    farestObject = obj;
                 }
         }
-
-        return nearestObject;
+        print(farestObject.name);
+        return farestObject;
     }
 
     public List<GameObject> FindObjectsWithTag(Vector2 center, float radius, string tag)
