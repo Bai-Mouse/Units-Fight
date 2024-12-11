@@ -16,7 +16,7 @@ MonoBehaviour:
   health: 1000000
   speed: 0
   strength: 0
-  damage: 0
+  damage: 10
   icon: {fileID: -2590226896292525289, guid: 9b209e1385630b94fb86ed647c52183c, type: 3}
   instance: {fileID: 7769759516863221882, guid: da2aed8f575130941a06f0e172915c35, type: 3}
   DamUpgradeCount: 1000000

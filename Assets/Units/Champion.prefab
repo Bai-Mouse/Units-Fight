@@ -4933,18 +4933,18 @@ MonoBehaviour:
   Target: {fileID: 0}
   CharacterData: {fileID: 0}
   TargetPosition: {x: 0, y: 0, z: 0}
-  TracingRange: 0
+  TracingRange: 1000
   speed: 6
   Health: 20
   Strength: 0
-  Damage: 1
-  Range: 0
-  AttackSpeed: 1000
+  Damage: 0
+  Range: 1000
+  AttackSpeed: 0
   UI:
   - {fileID: 6818387342440636171, guid: 60f4085790b839448920efd6e4aab191, type: 3}
   - {fileID: 6818387342440636171, guid: a4413cba4c70bc340a35b0b0cb640b04, type: 3}
   EnemyTag: 
-  myTraceMode: 0
+  myTraceMode: 5
   myActMode: 0
   myAttackMode: 0
 --- !u!50 &5564821909533452869

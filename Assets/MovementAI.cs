@@ -451,7 +451,7 @@ public class MovementAI : MonoBehaviour
             case ActMode.Attack:
                 if (Target)
                 {
-                    anim.SetTrigger("attack");
+                    if (animator) anim.SetTrigger("attack");
                     Target.GetComponent<MovementAI>().GetHit(-Damage, GetDirection(TargetPosition), Strength, gameObject);
                     AttackCd = AttackSpeed;
                     myActMode = ActMode.Idle;
