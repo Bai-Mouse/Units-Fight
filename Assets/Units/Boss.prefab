@@ -4992,6 +4992,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Target: {fileID: 0}
+  CharacterData: {fileID: 0}
   TargetPosition: {x: 0, y: 0, z: 0}
   TracingRange: 200
   speed: 10
@@ -4999,13 +5000,14 @@ MonoBehaviour:
   Strength: 10
   Damage: 5
   Range: 3
-  AttackSpeed: 1
+  AttackSpeed: 2
   UI:
   - {fileID: 6818387342440636171, guid: 60f4085790b839448920efd6e4aab191, type: 3}
   - {fileID: 6818387342440636171, guid: a4413cba4c70bc340a35b0b0cb640b04, type: 3}
   EnemyTag: 
   myTraceMode: 0
   myActMode: 0
+  myAttackMode: 0
 --- !u!114 &4455420502068994944
 MonoBehaviour:
   m_ObjectHideFlags: 0
