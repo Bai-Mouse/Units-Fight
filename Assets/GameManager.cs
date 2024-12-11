@@ -35,7 +35,7 @@ public class GameManager : MonoBehaviour
     public CharacterData SelectedUnit;
     public CharacterData[] SelectableUnits;
     public bool Pause;
-    public TextMeshProUGUI MoneyText,Counter,WaveCount,UnitsCount;
+    public TextMeshProUGUI MoneyText,Counter,WaveCount,UnitsCount,FinishCg;
     public UnitsInfo UnitsInfo;
     public GameObject _turrut;
     public GameObject Boss;
@@ -121,7 +121,7 @@ public class GameManager : MonoBehaviour
             Cursor.transform.position += new Vector3((worldPosition.x - Cursor.transform.position.x) / 5, (worldPosition.y - Cursor.transform.position.y) / 5);
             if (Input.GetMouseButtonDown(0) && !EventSystem.current.IsPointerOverGameObject())
             {
-                if(Money >= SelectedUnit.cost&& Unit<100)
+                if (Money >= SelectedUnit.cost && Unit < 100)
                 {
                     addMoney(SelectedUnit.cost * -1);
                     MovementAI info = Instantiate(SelectedUnit.instance, new Vector3(worldPosition.x, worldPosition.y, 0), Quaternion.identity).GetComponent<MovementAI>();
@@ -131,6 +131,11 @@ public class GameManager : MonoBehaviour
                     info.Strength = SelectedUnit.strength;
                     info.CharacterData = SelectedUnit;
                     addUnit(SelectedUnit.occupancy);
+                    //end game if buying trophy
+                    if (SelectedUnit.cost>=500) { 
+                    FinishCg.gameObject.SetActive(true);
+                    FinishCg.text = "Finished Wave: " + Wave;
+                    }
 
                 }
                 if (Money < SelectedUnit.cost)

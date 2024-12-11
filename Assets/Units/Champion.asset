@@ -10,16 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5ccb7484bb3c6f44bb895d090a8d38d7, type: 3}
-  m_Name: Unit2
+  m_Name: Champion
   m_EditorClassIdentifier: 
-  cost: 5
-  health: 8
-  speed: 20
+  cost: 500
+  health: 1000000
+  speed: 0
   strength: 0
-  damage: 1
-  icon: {fileID: 6570920502705930198, guid: 9f8778d0d44049a459735824f24042e0, type: 3}
-  instance: {fileID: 1533614338613974479, guid: 2bb6d4b0b0c9f3a40b5e7c5ce5b923d9, type: 3}
-  DamUpgradeCount: 0
-  HPUpgradeCount: 0
-  description: Low Hp, Low ATK, High Speed, Focus on backline
-  occupancy: 1
+  damage: 0
+  icon: {fileID: -2590226896292525289, guid: 9b209e1385630b94fb86ed647c52183c, type: 3}
+  instance: {fileID: 7769759516863221882, guid: da2aed8f575130941a06f0e172915c35, type: 3}
+  DamUpgradeCount: 1000000
+  HPUpgradeCount: 1000000
+  description: Place to End Game
+  occupancy: 0

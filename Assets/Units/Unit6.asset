@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ccb7484bb3c6f44bb895d090a8d38d7, type: 3}
   m_Name: Unit6
   m_EditorClassIdentifier: 
-  cost: 50
-  health: 50
+  cost: 60
+  health: 100
   speed: 30
   strength: 10
   damage: 10

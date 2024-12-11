@@ -575,6 +575,8 @@ public class MovementAI : MonoBehaviour
             if (gameManager._turrut == gameObject)
             {
                 gameManager.RetryButton.SetActive(true);
+                gameManager.FinishCg.gameObject.SetActive(true);
+                gameManager.FinishCg.text = "Finished Wave: " + gameManager.Wave;
             }
             if(CharacterData)
             gameManager.addUnit(-CharacterData.occupancy);

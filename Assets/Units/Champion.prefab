@@ -48,9 +48,9 @@ ParticleSystem:
   ringBufferMode: 0
   ringBufferLoopRange: {x: 0, y: 1}
   emitterVelocityMode: 1
-  looping: 0
+  looping: 1
   prewarm: 0
-  playOnAwake: 0
+  playOnAwake: 1
   useUnscaledTime: 0
   autoRandomSeed: 1
   startDelay:
@@ -169,7 +169,7 @@ ParticleSystem:
     startSpeed:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 1
+      scalar: 2
       minScalar: 5
       maxCurve:
         serializedVersion: 2
@@ -287,7 +287,7 @@ ParticleSystem:
     startSize:
       serializedVersion: 2
       minMaxState: 3
-      scalar: 0.3
+      scalar: 0.2
       minScalar: 0.1
       maxCurve:
         serializedVersion: 2
@@ -664,7 +664,7 @@ ParticleSystem:
   ShapeModule:
     serializedVersion: 6
     enabled: 1
-    type: 17
+    type: 0
     angle: 25
     length: 5
     boxThickness: {x: 0, y: 0, z: 0}
@@ -870,7 +870,7 @@ ParticleSystem:
     rateOverTime:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 20
+      scalar: 10
       minScalar: 10
       maxCurve:
         serializedVersion: 2
@@ -1138,7 +1138,7 @@ ParticleSystem:
         m_RotationOrder: 4
     separateAxes: 0
   RotationModule:
-    enabled: 0
+    enabled: 1
     x:
       serializedVersion: 2
       minMaxState: 0
@@ -1248,7 +1248,7 @@ ParticleSystem:
     curve:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 0.7853982
+      scalar: 1.3962634
       minScalar: 0.7853982
       maxCurve:
         serializedVersion: 2
@@ -1308,9 +1308,9 @@ ParticleSystem:
       maxColor: {r: 1, g: 1, b: 1, a: 1}
       maxGradient:
         serializedVersion: 2
-        key0: {r: 1, g: 0.7370321, b: 0.3160377, a: 1}
-        key1: {r: 0.9150943, g: 0.32336813, b: 0.11654504, a: 1}
-        key2: {r: 0, g: 0, b: 0, a: 0}
+        key0: {r: 1, g: 1, b: 1, a: 1}
+        key1: {r: 1, g: 0.8908884, b: 0.13679248, a: 0}
+        key2: {r: 1, g: 0.47930524, b: 0.023584902, a: 0}
         key3: {r: 0, g: 0, b: 0, a: 0}
         key4: {r: 0, g: 0, b: 0, a: 0}
         key5: {r: 0, g: 0, b: 0, a: 0}
@@ -1324,7 +1324,7 @@ ParticleSystem:
         ctime5: 0
         ctime6: 0
         ctime7: 0
-        atime0: 0
+        atime0: 52428
         atime1: 65535
         atime2: 0
         atime3: 0
@@ -1494,7 +1494,7 @@ ParticleSystem:
     enabled: 1
     x:
       serializedVersion: 2
-      minMaxState: 3
+      minMaxState: 0
       scalar: 0
       minScalar: 0
       maxCurve:
@@ -1547,8 +1547,8 @@ ParticleSystem:
         m_RotationOrder: 4
     y:
       serializedVersion: 2
-      minMaxState: 3
-      scalar: 1
+      minMaxState: 0
+      scalar: 0
       minScalar: 4
       maxCurve:
         serializedVersion: 2
@@ -1600,7 +1600,7 @@ ParticleSystem:
         m_RotationOrder: 4
     z:
       serializedVersion: 2
-      minMaxState: 3
+      minMaxState: 0
       scalar: 0
       minScalar: 0
       maxCurve:
@@ -4797,7 +4797,7 @@ ParticleSystemRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 20
+  m_SortingOrder: 0
   m_RenderMode: 0
   m_MeshDistribution: 0
   m_SortMode: 0
@@ -4843,9 +4843,8 @@ GameObject:
   - component: {fileID: 5864345500289176653}
   - component: {fileID: 5564821909533452869}
   - component: {fileID: 5122192508210515361}
-  - component: {fileID: 8815972954611971234}
   m_Layer: 0
-  m_Name: Unit8
+  m_Name: Champion
   m_TagString: GreenTeam
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4908,7 +4907,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 10
-  m_Sprite: {fileID: -9070499791870808695, guid: 045eb5e1f0cbc424e9a8eed9eaf27bf8, type: 3}
+  m_Sprite: {fileID: -2590226896292525289, guid: 9b209e1385630b94fb86ed647c52183c, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 1
   m_FlipY: 0
@@ -4934,20 +4933,20 @@ MonoBehaviour:
   Target: {fileID: 0}
   CharacterData: {fileID: 0}
   TargetPosition: {x: 0, y: 0, z: 0}
-  TracingRange: 40
+  TracingRange: 0
   speed: 6
   Health: 20
-  Strength: 2
+  Strength: 0
   Damage: 1
-  Range: 1
-  AttackSpeed: 0.2
+  Range: 0
+  AttackSpeed: 1000
   UI:
   - {fileID: 6818387342440636171, guid: 60f4085790b839448920efd6e4aab191, type: 3}
   - {fileID: 6818387342440636171, guid: a4413cba4c70bc340a35b0b0cb640b04, type: 3}
   EnemyTag: 
   myTraceMode: 0
   myActMode: 0
-  myAttackMode: 1
+  myAttackMode: 0
 --- !u!50 &5564821909533452869
 Rigidbody2D:
   serializedVersion: 4
@@ -4960,7 +4959,7 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 2
+  m_Mass: 1000
   m_LinearDrag: 0.5
   m_AngularDrag: 1
   m_GravityScale: 0
@@ -5010,24 +5009,3 @@ CircleCollider2D:
   m_Offset: {x: 0, y: -0.076312125}
   serializedVersion: 2
   m_Radius: 0.11926959
---- !u!95 &8815972954611971234
-Animator:
-  serializedVersion: 5
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7769759516863221882}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 7d1534529d7f6dd48975c41d8f19171d, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0

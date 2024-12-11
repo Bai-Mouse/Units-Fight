@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ccb7484bb3c6f44bb895d090a8d38d7, type: 3}
   m_Name: Unit3
   m_EditorClassIdentifier: 
-  cost: 20
-  health: 30
-  speed: 6
+  cost: 25
+  health: 40
+  speed: 5
   strength: 4
   damage: 2
   icon: {fileID: -6056987297122131021, guid: a6465882e447a7346b1d80709f6094be, type: 3}
