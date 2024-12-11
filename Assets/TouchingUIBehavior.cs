@@ -8,6 +8,7 @@ public class UIMoveOnHoverByTag : MonoBehaviour, IPointerEnterHandler, IPointerE
     private bool isHovering = false;
     public Vector3 MoveOffset;
     Vector3 NewPosition,OriginalPosition;
+    float counter;
     private void Start()
     {
         OriginalPosition=transform.position;
@@ -15,23 +16,37 @@ public class UIMoveOnHoverByTag : MonoBehaviour, IPointerEnterHandler, IPointerE
     }
     public void OnPointerEnter(PointerEventData eventData)
     {
+        OriginalPosition = transform.position;
+        NewPosition = transform.position + MoveOffset;
         isHovering = true;
+        counter = 0;
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
         isHovering = false;
+        counter = 0;
     }
 
     void Update()
     {
         if (isHovering)
         {
-            transform.position +=( NewPosition - transform.position )/5 ;
+            if (counter <= 0.2f)
+            {
+                counter += Time.deltaTime;
+                transform.position += (NewPosition - transform.position) / 2;
+            }
+
         }
         else
         {
-            transform.position += (OriginalPosition - transform.position) / 5;
+            if (counter <= 0.2f)
+            {
+                counter += Time.deltaTime;
+                transform.position += (OriginalPosition - transform.position) / 2;
+            }
+
         }
     }
 }
